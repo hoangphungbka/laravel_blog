@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('shared.organic-breadcrumb')
+    @include('shared.organic-breadcrumb', ['name' => 'Product Details Page', 'breadcrumb' => 'Product Details'])
 
     <!--================Single Product Area =================-->
     <div class="product_image_area">

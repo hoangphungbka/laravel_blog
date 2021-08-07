@@ -5791,3 +5791,8 @@ label {
     color: #ffba00; }
 
 /*# sourceMappingURL=main.css.map */
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}

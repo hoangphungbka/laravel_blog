@@ -14,6 +14,7 @@ use App\Http\Controllers\WelcomeController;
 |
 */
 
-Route::get('/', [WelcomeController::class, 'index']);
+Route::get('/', [WelcomeController::class, 'index'])->name('index');
+Route::get('category', [WelcomeController::class, 'category'])->name('category');
 
-Route::view('products', 'product');
+Route::view('products', 'product')->name('products.single');
