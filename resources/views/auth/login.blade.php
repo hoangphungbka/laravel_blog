@@ -28,6 +28,7 @@
                             </div>
                             <div class="col-md-12 form-group">
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+                                @error('password') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-12 form-group">
                                 <div class="creat_account">

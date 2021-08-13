@@ -31,18 +31,23 @@
                             </div>
                             <div class="col-md-12 form-group">
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+                                @error('password') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-12 form-group">
                                 <input type="text" class="form-control" value="{{ old('name') }}" id="name" name="name" placeholder="Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Name'">
+                                @error('name') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-12 form-group">
                                 <input type="text" class="form-control" value="{{ old('email') }}" id="email" name="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'">
+                                @error('email') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-12 form-group">
                                 <input type="text" class="form-control" value="{{ old('phone') }}" id="phone" name="phone" placeholder="Phone" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone'">
+                                @error('phone') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-12 form-group">
                                 <input type="text" class="form-control" value="{{ old('address') }}" id="address" name="address" placeholder="Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Address'">
+                                @error('address') <div class="text-danger">{{ $message }}</div> @enderror
                             </div>
                             <div class="col-md-12 form-group">
                                 <button type="submit" value="submit" class="primary-btn">Register</button>

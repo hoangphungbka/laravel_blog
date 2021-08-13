@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
+//use App\Mail\VerifyEmail;
 use App\Models\User;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
+use App\Notifications\VerifyEmail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+
+//use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -13,7 +19,7 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
         // Validate
 
@@ -27,6 +33,8 @@ class RegisterController extends Controller
         );
 
         // Send mail verify
+//        Mail::to($customer->email)->send(new VerifyEmail($customer)); // using mailable class
+        Notification::route('mail', $customer->email)->notify(new VerifyEmail());
 
         return redirect()->route('login')
             ->with('success', 'Register successfully. Please verify your email.');

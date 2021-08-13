@@ -21,11 +21,11 @@ use App\Http\Controllers\RegisterController;
 Route::get('/', [WelcomeController::class, 'index'])->name('index');
 Route::get('category', [WelcomeController::class, 'category'])->name('category');
 
-Route::view('products', 'product')->name('products.single')->middleware('auth');
+Route::get('products/{id}', [WelcomeController::class, 'show'])->name('products.single');
 
 Route::middleware('guest')->group(function (Router $router) {
     $router->get('login', [AuthController::class, 'showForm'])->name('login');
-    $router->post('login', [AuthController::class, 'login'])->name('auth.login');
+    $router->post('login', [AuthController::class, 'login'])->middleware('xxx')->name('auth.login');
 
     $router->get('register', [RegisterController::class, 'showForm'])->name('register');
     $router->post('register', [RegisterController::class, 'register'])->name('auth.register');

@@ -31,4 +31,11 @@ class WelcomeController extends Controller
 
         return view('category', compact('categories', 'brands', 'colors', 'products', 'perPage', 'sortField'));
     }
+
+    public function show($id)
+    {
+        $product = Product::with('category', 'availableSizes')->findOrFail($id);
+
+        return view('product', compact('product'));
+    }
 }

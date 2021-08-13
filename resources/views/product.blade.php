@@ -26,7 +26,7 @@
                         <h2>$149.99</h2>
                         <ul class="list">
                             <li><a class="active" href="#"><span>Category</span> : Household</a></li>
-                            <li><a href="#"><span>Availibility</span> : In Stock</a></li>
+                            <li><a href="#"><span>Availibility</span> : {{ $product->availableSizes->count() > 0 ? 'In Stock' : 'Out Stock' }}</a></li>
                         </ul>
                         <p>Mill Oil is an innovative oil filled radiator with the most modern technology. If you are looking for
                             something that can make your interior look awesome, and at the same time give you the pleasant warm feeling

@@ -15,6 +15,11 @@ class AuthController extends Controller
 
     public function login(Request $request): RedirectResponse
     {
+        $request->validate([
+            'username' => 'bail|required|min:6',
+            'password' => 'bail|required|min:6'
+        ]);
+
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials, $request->has('remember_me'))) {
