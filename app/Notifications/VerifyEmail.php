@@ -6,8 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\URL;
 
-class VerifyEmail extends Notification
+class VerifyEmail extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -40,9 +41,10 @@ class VerifyEmail extends Notification
      */
     public function toMail($notifiable): MailMessage
     {
+        $signedRoute = URL::signedRoute('verify.email', ['email' => $notifiable->routes['mail']]);
         return (new MailMessage)
                     ->line('The introduction to the notification.')
-                    ->action('Notification Action', route('verify.email'))
+                    ->action('Notification Action', $signedRoute)
                     ->line('Thank you for using our application!');
     }
 

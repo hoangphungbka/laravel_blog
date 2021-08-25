@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
-//use App\Mail\VerifyEmail;
 use App\Models\User;
-//use Illuminate\Http\Request;
 use App\Notifications\VerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-
-//use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -19,10 +18,8 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): RedirectResponse
     {
-        // Validate
-
         $user = User::query()->create([
             'username' => $request->input('username'),
             'password' => Hash::make($request->input('password'))
@@ -38,5 +35,18 @@ class RegisterController extends Controller
 
         return redirect()->route('login')
             ->with('success', 'Register successfully. Please verify your email.');
+    }
+
+    public function verifyEmail($email): RedirectResponse
+    {
+        $user = User::query()->whereHas('customer', function (Builder $builder) use ($email) {
+            return $builder->where('email', $email);
+        })->firstOrFail();
+
+        if ($user instanceof MustVerifyEmail && !$user->hasVerifiedEmail()) {
+            $user->forceFill(['email_verified_at' => now()])->save();
+        }
+
+        return redirect()->route('login')->with('success', 'Verify email successfully. Please login.');
     }
 }

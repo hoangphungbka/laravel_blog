@@ -25,8 +25,10 @@ Route::get('products/{id}', [WelcomeController::class, 'show'])->name('products.
 
 Route::middleware('guest')->group(function (Router $router) {
     $router->get('login', [AuthController::class, 'showForm'])->name('login');
-    $router->post('login', [AuthController::class, 'login'])->middleware('xxx')->name('auth.login');
+    $router->post('login', [AuthController::class, 'login'])->middleware('app.verified')->name('auth.login');
 
     $router->get('register', [RegisterController::class, 'showForm'])->name('register');
     $router->post('register', [RegisterController::class, 'register'])->name('auth.register');
+
+    $router->get('verify/{email}', [RegisterController::class, 'verifyEmail'])->middleware('signed')->name('verify.email');
 });
