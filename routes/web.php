@@ -7,6 +7,9 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
 
+use App\Http\Controllers\Admin\WelcomeController as AdminWelcomeController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,4 +34,12 @@ Route::middleware('guest')->group(function (Router $router) {
     $router->post('register', [RegisterController::class, 'register'])->name('auth.register');
 
     $router->get('verify/{email}', [RegisterController::class, 'verifyEmail'])->middleware('signed')->name('verify.email');
+});
+
+Route::prefix('admin')->name('admin.')->group(function (Router $router) {
+    $router->get('/', [AdminWelcomeController::class, 'index'])->name('index');
+
+    $router->middleware('admin.guest')->group(function (Router $router) {
+        $router->get('login', [AdminAuthController::class, 'showForm'])->name('login');
+    });
 });
