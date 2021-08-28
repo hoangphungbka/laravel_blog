@@ -9,6 +9,7 @@ use App\Http\Controllers\RegisterController;
 
 use App\Http\Controllers\Admin\WelcomeController as AdminWelcomeController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,8 @@ Route::middleware('guest')->group(function (Router $router) {
 
 Route::prefix('admin')->name('admin.')->group(function (Router $router) {
     $router->get('/', [AdminWelcomeController::class, 'index'])->name('index');
+
+    $router->resource('products', ProductController::class);
 
     $router->middleware('admin.guest')->group(function (Router $router) {
         $router->get('login', [AdminAuthController::class, 'showForm'])->name('login');
