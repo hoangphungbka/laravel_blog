@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">Quick Example</h3>
         </div>
-        <form method="POST" action="{{ route('admin.products.store') }}">
+        <form method="POST" action="{{ route('admin.products.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="card-body">
                 <div class="form-group">
@@ -46,24 +46,24 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="category">Category</label>
-                    <select class="custom-select" id="category" name="category">
+                    <label for="category_id">Category</label>
+                    <select class="custom-select" id="category_id" name="category_id">
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="brand">Brand</label>
-                    <select class="custom-select" id="brand" name="brand">
+                    <label for="brand_id">Brand</label>
+                    <select class="custom-select" id="brand_id" name="brand_id">
                         @foreach($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="color">Color</label>
-                    <select class="custom-select" id="color" name="color">
+                    <label for="color_id">Color</label>
+                    <select class="custom-select" id="color_id" name="color_id">
                         @foreach($colors as $color)
                             <option value="{{ $color->id }}">{{ $color->name }}</option>
                         @endforeach
@@ -72,8 +72,8 @@
                 <div class="form-group">
                     <label for="status">Status</label>
                     <select class="custom-select" id="status" name="status">
-                        <option>Coming Soon</option>
-                        <option>In Stock</option>
+                        <option value="0">Coming Soon</option>
+                        <option value="1">In Stock</option>
                     </select>
                 </div>
             </div>
@@ -86,38 +86,5 @@
 @endsection
 
 @push('scripts')
-<script>
-    $(document).ready(function () {
-        $('#btn-add').click(function () {
-            var sizes = $(this).data('sizes');
-            var options = '';
-
-            for (var i = 0; i < sizes.length; i++) {
-                options += `<option value="${sizes[i]['id']}">${sizes[i]['size']}</option>`
-            }
-
-            $('#group-add').append(`
-                <div class="d-flex mb-1">
-                    <select class="custom-select mr-1" name="sizes[]">
-                        ${options}
-                    </select>
-                    <input type="number" class="form-control mr-1" name="quantities[]">
-                    <button type="button" class="btn btn-danger btn-remove">Remove</button>
-                </div>
-            `);
-
-            const btnRemoves = $('#group-add .btn-remove');
-            if (btnRemoves.length > 1) {
-                btnRemoves.removeClass('disabled');
-            }
-        });
-        $('#group-add').on('click', '.btn-remove:not(.disabled)', function () {
-            $(this).closest('.d-flex').remove();
-            const btnRemoves = $('#group-add .btn-remove');
-            if (btnRemoves.length === 1) {
-                btnRemoves.addClass('disabled');
-            }
-        });
-    });
-</script>
+<script type="text/javascript" src="{{ asset('dist/js/products.js') }}"></script>
 @endpush

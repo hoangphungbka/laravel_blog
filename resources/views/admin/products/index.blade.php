@@ -25,6 +25,7 @@
                 <th>Price</th>
                 <th>Discount</th>
                 <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -44,6 +45,10 @@
                         <span class="badge bg-success">In Stock</span>
                     @endif
                 </td>
+                <td>
+                    <a class="btn btn-warning btn-sm" href="{{ route('admin.products.edit', $product->id) }}">Edit</a>
+                    <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="{{ $product->id }}">Delete</button>
+                </td>
             </tr>
         @endforeach
         </tbody>
@@ -57,3 +62,25 @@
         <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
     </ul>
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.btn-delete').click(function () {
+            if (confirm('Are you sure ...')) {
+                const id = $(this).data('id');
+                $.ajax({
+                    url: `/admin/products/${id}`,
+                    type: 'DELETE',
+                    data: {
+                        '_token': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        location.reload();
+                    }
+                });
+            }
+        })
+    });
+</script>
+@endpush
