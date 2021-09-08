@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
@@ -11,6 +12,7 @@ use App\Models\Size;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -45,10 +47,10 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\StoreProductRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreProductRequest $request): RedirectResponse
     {
         $product = Product::query()->create($request->all());
 
@@ -82,23 +84,47 @@ class ProductController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
-        //
+        $categories = Category::all(['id', 'name']);
+        $brands = Brand::all(['id', 'name']);
+        $colors = Color::all(['id', 'name']);
+        $sizes = Size::all(['id', 'size']);
+
+        $product = Product::with('category', 'brand', 'color', 'sizes')->findOrFail($id);
+
+        return view('admin.products.edit', compact('categories', 'brands', 'colors', 'sizes', 'product'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StoreProductRequest  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(StoreProductRequest $request, int $id): RedirectResponse
     {
-        //
+        $product = Product::query()->findOrFail($id);
+        $product->update($request->except('image'));
+
+        if ($fileUpload = $request->file('image')) {
+            File::delete(public_path($product->getAttribute('image')));
+
+            $filename = date('YmdHis') . '_' . $fileUpload->getClientOriginalName();
+            $fileUpload->move(public_path('img/product'), $filename);
+
+            $product->update(['image' => "/img/product/$filename"]);
+        }
+
+        $data = collect($request->input('sizes'))->combine($request->input('quantities'))
+            ->map(function (int $quantity) { return ['quantity' => $quantity]; });
+
+        $product->sizes()->sync($data);
+
+        return redirect()->route('admin.products.index');
     }
 
     /**
