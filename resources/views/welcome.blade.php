@@ -2,6 +2,9 @@
 
 @section('content')
     <!-- start banner Area -->
+    @if(session('success'))
+        <div class="alert alert-success" role="alert">{{ session('success') }}</div>
+    @endif
     <section class="banner-area">
         <div class="container">
             <div class="row fullscreen align-items-center justify-content-start">
@@ -193,12 +196,12 @@
                                 <div class="product-details">
                                     <h6>{{ $product->name }}</h6>
                                     <div class="price">
-                                        <h6>${{ number_format($product->price * $product->discount / 100, 2) }}</h6>
+                                        <h6>${{ number_format($product->price * (100 - $product->discount) / 100, 2) }}</h6>
                                         <h6 class="l-through">${{ number_format($product->price, 2) }}</h6>
                                     </div>
                                     <div class="prd-bottom">
 
-                                        <a href="" class="social-info">
+                                        <a href="{{ route('carts.addToCart', $product->id) }}" class="social-info">
                                             <span class="ti-bag"></span>
                                             <p class="hover-text">add to bag</p>
                                         </a>

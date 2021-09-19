@@ -6,6 +6,7 @@ use Illuminate\Routing\Router;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\CartController;
 
 use App\Http\Controllers\Admin\WelcomeController as AdminWelcomeController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
@@ -26,6 +27,9 @@ Route::get('/', [WelcomeController::class, 'index'])->name('index');
 Route::get('category', [WelcomeController::class, 'category'])->name('category');
 
 Route::get('products/{id}', [WelcomeController::class, 'show'])->name('products.single');
+Route::get('carts/{id}', [CartController::class, 'addToCart'])->name('carts.addToCart');
+Route::view('carts', 'cart')->name('carts.index');
+Route::get('checkout', [CartController::class, 'checkout'])->name('carts.checkout')->middleware('auth');
 
 Route::middleware('guest')->group(function (Router $router) {
     $router->get('login', [AuthController::class, 'showForm'])->name('login');
