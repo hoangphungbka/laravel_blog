@@ -5,6 +5,7 @@ use Illuminate\Routing\Router;
 
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\CartController;
 
@@ -39,6 +40,11 @@ Route::middleware('guest')->group(function (Router $router) {
     $router->post('register', [RegisterController::class, 'register'])->name('auth.register');
 
     $router->get('verify/{email}', [RegisterController::class, 'verifyEmail'])->middleware('signed')->name('verify.email');
+
+    $router->view('password/forgot', 'password.forgot')->name('password.forgot');
+    $router->post('password/forgot', [PasswordController::class, 'sendMailForgot'])->middleware('throttle:5,1')->name('password.sendMailForgot');
+    $router->view('password/reset/{email}', 'password.reset')->middleware('signed')->name('password.reset');
+    $router->post('password/reset/{email}', [PasswordController::class, 'resetPassword'])->middleware('signed')->name('password.resetPassword');
 });
 
 Route::prefix('admin')->name('admin.')->group(function (Router $router) {
